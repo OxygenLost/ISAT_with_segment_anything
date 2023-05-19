@@ -36,6 +36,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_root: str = None
         self.label_root:str = None
 
+        self.labelme_mode = True
+
         self.files_list: list = []
         self.current_index = None
         self.current_file_index: int = None
@@ -45,6 +47,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.can_be_annotated = True
         self.load_finished = False
         self.polygons:list = []
+
+        self.is_single_class = False # 是否是单类别标注
 
         self.png_palette = None # 图像拥有调色盘，说明是单通道的标注png文件
         self.instance_cmap = imgviz.label_colormap()
@@ -228,6 +232,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.show_image(self.current_index)
 
     def save(self):
+
         if self.current_label is None:
             return
         self.current_label.objects.clear()
@@ -236,7 +241,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.current_label.objects.append(object)
 
         self.current_label.note = self.info_dock_widget.lineEdit_note.text()
-        self.current_label.save_annotation()
+
+
+        if self.labelme_mode:
+            self.current_label.save_labelme()
+        else:
+            self.current_label.save_annotation()
+        
         # 保存标注文件的同时保存一份isat配置文件
         self.save_cfg(os.path.join(self.label_root, 'isat.yaml'))
         self.set_saved_state(True)

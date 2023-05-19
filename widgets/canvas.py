@@ -196,7 +196,7 @@ class AnnotationScene(QtWidgets.QGraphicsScene):
 
         # 选择类别
         self.mainwindow.category_choice_widget.load_cfg()
-        self.mainwindow.category_choice_widget.show()
+        self.mainwindow.category_choice_widget.show() # 显示类别选择窗口
 
         # mask清空
         self.click_points.clear()

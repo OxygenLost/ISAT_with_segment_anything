@@ -62,8 +62,12 @@ class CategoryChoiceDialog(QtWidgets.QDialog, Ui_Dialog):
 
         if self.listWidget.count() == 0:
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Please set categorys before tagging.')
-
-    def get_category(self, item):
+        else:
+            # 默认选择第二个category
+            self.listWidget.setCurrentRow(1)
+            self.get_category(self.listWidget.currentItem())
+            
+    def get_category(self, item): # 选择category
         widget = self.listWidget.itemWidget(item)
         label_category = widget.findChild(QtWidgets.QLabel, 'label_category')
         self.lineEdit_category.setText(label_category.text())

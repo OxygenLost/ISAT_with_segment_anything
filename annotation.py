@@ -1,12 +1,27 @@
 # -*- coding: utf-8 -*-
 # @Author  : LG
 
+import base64
+import io
 import os
 from PIL import Image
 import numpy as np
 from json import load, dump
 from typing import List
 
+def img_arr_to_b64(img_arr):
+    img_pil = Image.fromarray(img_arr)
+    f = io.BytesIO()
+    img_pil.save(f, format="JPEG")
+    img_bin = f.getvalue()
+    if hasattr(base64, "encodebytes"):
+        img_b64 = base64.encodebytes(img_bin)
+    else:
+        img_b64 = base64.encodestring(img_bin)
+    img_b64 = str(img_b64).replace(r'\n', '')
+    img_b64 = str(img_b64).replace(r"b'", '')
+    img_b64 = str(img_b64).replace(r"'", '')
+    return img_b64
 
 class Object:
     def __init__(self, category:str, group:int, segmentation, area, layer, bbox, iscrowd=0, note=''):
@@ -28,8 +43,9 @@ class Annotation:
         self.img_name = img_name
         self.label_path = label_path
         self.note = ''
-
+        
         image = np.array(Image.open(image_path))
+        self.imageData = image.copy
         if image.ndim == 3:
             self.height, self.width, self.depth = image.shape
         elif image.ndim == 2:
@@ -116,6 +132,29 @@ class Annotation:
             object['iscrowd'] = obj.iscrowd
             object['note'] = obj.note
             dataset['objects'].append(object)
+        with open(self.label_path, 'w') as f:
+            dump(dataset, f, indent=4)
+        return True
+    
+    def save_labelme(self):
+        dataset = {}
+        dataset['version'] = "5.2.0.post4"
+        dataset['flags'] = {}
+        dataset['shapes'] = []
+        for obj in self.objects:
+            object = {}
+            object['label'] = obj.category
+            if obj.group is None:
+                object['group_id'] = 0
+            object['points'] = obj.segmentation
+            object['description'] = ""
+            object['shape_type'] = "polygon"
+            object['flags'] = {}
+            dataset['shapes'].append(object)
+        dataset['imageData'] = img_arr_to_b64(self.imageData)
+        dataset['imagePath'] = self.img_folder
+        dataset['imageWidth'] = self.width
+        dataset['imageHeight'] = self.height
         with open(self.label_path, 'w') as f:
             dump(dataset, f, indent=4)
         return True

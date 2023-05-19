@@ -6,7 +6,7 @@ from ui.label_dock import Ui_Form
 import functools
 
 
-class LabelsDockWidget(QtWidgets.QWidget, Ui_Form):
+class LabelsDockWidget(QtWidgets.QWidget, Ui_Form):  
     def __init__(self, mainwindow):
         super(LabelsDockWidget, self).__init__()
         self.setupUi(self)
@@ -15,6 +15,9 @@ class LabelsDockWidget(QtWidgets.QWidget, Ui_Form):
 
         self.listWidget.itemSelectionChanged.connect(self.set_polygon_selected)
         self.checkBox_visible.stateChanged.connect(self.set_all_polygon_visible)
+        self.checkBox_Single.stateChanged.connect(self.set_single_class)
+
+        self.is_single_class = False
 
         self.listWidget.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.listWidget.customContextMenuRequested.connect(
@@ -23,7 +26,7 @@ class LabelsDockWidget(QtWidgets.QWidget, Ui_Form):
     def right_button_menu(self, point):
         self.mainwindow.right_button_menu.exec_(self.listWidget.mapToGlobal(point))
 
-    def generate_item_and_itemwidget(self, polygon):
+    def generate_item_and_itemwidget(self, polygon):  # 生成item和item_widget
         color = self.mainwindow.category_color_dict.get(polygon.category, '#000000')
         item = QtWidgets.QListWidgetItem()
         item.setSizeHint(QtCore.QSize(200, 30))
@@ -114,3 +117,11 @@ class LabelsDockWidget(QtWidgets.QWidget, Ui_Form):
             check_box = widget.findChild(QtWidgets.QCheckBox, 'check_box')
             check_box.setChecked(visible)
         self.checkBox_visible.setChecked(visible)
+
+    def set_single_class(self, single:bool=None):
+        single = self.checkBox_Single.isChecked() if single is None else single
+        if single:
+            self.is_single_class = True
+        else:
+            self.is_single_class = False
+

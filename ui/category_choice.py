@@ -104,12 +104,19 @@ class Ui_Dialog(object):
         self.pushButton_cancel.setObjectName("pushButton_cancel")
         self.horizontalLayout_2.addWidget(self.pushButton_cancel)
         self.pushButton_apply = QtWidgets.QPushButton(self.widget_2)
+
+        
+        
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/icons/校验_check-one.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_apply.setIcon(icon1)
         self.pushButton_apply.setObjectName("pushButton_apply")
         self.horizontalLayout_2.addWidget(self.pushButton_apply)
         self.verticalLayout.addWidget(self.widget_2)
+
+        # 设置apply为默认按钮
+        self.pushButton_apply.setDefault(True)
+        self.pushButton_apply.setFocus()
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
