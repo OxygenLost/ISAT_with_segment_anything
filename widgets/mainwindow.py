@@ -332,9 +332,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.current_index is None:
             return
         if not self.saved:
-            result = QtWidgets.QMessageBox.question(self, 'Warning', 'Proceed without saved?', QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No)
-            if result == QtWidgets.QMessageBox.StandardButton.No:
-                return
+            # result = QtWidgets.QMessageBox.question(self, 'Warning', 'Proceed without saved?', QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No)
+            # if result == QtWidgets.QMessageBox.StandardButton.No:
+            #     return
+            # 弹出自动保存消息
+            # QtWidgets.QMessageBox.information(self, 'Information', 'Auto save.')
+            self.save()
         self.current_index = self.current_index - 1
         if self.current_index < 0:
             self.current_index = 0
@@ -348,9 +351,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.current_index is None:
             return
         if not self.saved:
-            result = QtWidgets.QMessageBox.question(self, 'Warning', 'Proceed without saved?', QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No)
-            if result == QtWidgets.QMessageBox.StandardButton.No:
-                return
+            # result = QtWidgets.QMessageBox.question(self, 'Warning', 'Proceed without saved?', QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No)
+            # if result == QtWidgets.QMessageBox.StandardButton.No:
+            #     return
+            # 弹出自动保存消息
+            # QtWidgets.QMessageBox.information(self, 'Information', 'Auto save.')
+            self.save()
         self.current_index = self.current_index + 1
         if self.current_index > len(self.files_list)-1:
             self.current_index = len(self.files_list)-1
