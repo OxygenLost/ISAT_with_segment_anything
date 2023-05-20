@@ -32,12 +32,11 @@ Demo Video：[youtube](https://www.youtube.com/watch?v=yLdZCPmX-Bc)
 ## 1. 源码运行
 ### (1) 创建虚拟环境
 ```shell
-conda create -n ISAT_with_segment_anything python==3.8
-conda activate ISAT_with_segment_anything
+conda create -n sam python==3.8.15
+conda activate sam
 ```
 ### (2) 安装Segment anything
 ```shell
-git clone git@github.com:facebookresearch/segment-anything.git
 cd segment-anything
 pip install -e .
 cd ..
