@@ -49,4 +49,7 @@ def isat_to_lebelme(json_path):
     with open(json_path.replace('.json', 'labelme.json'), 'w') as f:
         json.dump(data, f, indent=4)
 if __name__ == '__main__':
-    isat_to_lebelme("Image10.json")
+    img = Image.open("Image10.jpg")
+    img_pil = numpy.array(img)
+    print(img_arr_to_b64(img_pil))
+

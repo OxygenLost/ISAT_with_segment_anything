@@ -9,8 +9,9 @@ import numpy as np
 from json import load, dump
 from typing import List
 
+
 def img_arr_to_b64(img_arr):
-    img_pil = Image.fromarray(img_arr)
+    img_pil = Image.fromarray(np.uint8(img_arr))
     f = io.BytesIO()
     img_pil.save(f, format="JPEG")
     img_bin = f.getvalue()
@@ -23,8 +24,9 @@ def img_arr_to_b64(img_arr):
     img_b64 = str(img_b64).replace(r"'", '')
     return img_b64
 
+
 class Object:
-    def __init__(self, category:str, group:int, segmentation, area, layer, bbox, iscrowd=0, note=''):
+    def __init__(self, category: str, group: int, segmentation, area, layer, bbox, iscrowd=0, note=''):
         self.category = category
         self.group = group
         self.segmentation = segmentation
@@ -43,9 +45,9 @@ class Annotation:
         self.img_name = img_name
         self.label_path = label_path
         self.note = ''
-        
+
         image = np.array(Image.open(image_path))
-        self.imageData = image.copy
+        self.image = image.copy()
         if image.ndim == 3:
             self.height, self.width, self.depth = image.shape
         elif image.ndim == 2:
@@ -56,7 +58,7 @@ class Annotation:
             print('Warning: Except image has 2 or 3 ndim, but get {}.'.format(image.ndim))
         del image
 
-        self.objects:List[Object,...] = []
+        self.objects: List[Object, ...] = []
 
     def load_annotation(self):
         if os.path.exists(self.label_path):
@@ -135,7 +137,7 @@ class Annotation:
         with open(self.label_path, 'w') as f:
             dump(dataset, f, indent=4)
         return True
-    
+
     def save_labelme(self):
         dataset = {}
         dataset['version'] = "5.2.0.post4"
@@ -151,8 +153,8 @@ class Annotation:
             object['shape_type'] = "polygon"
             object['flags'] = {}
             dataset['shapes'].append(object)
-        dataset['imageData'] = img_arr_to_b64(self.imageData)
-        dataset['imagePath'] = self.img_folder
+        dataset['imageData'] = img_arr_to_b64(self.image)
+        dataset['imagePath'] = self.img_name
         dataset['imageWidth'] = self.width
         dataset['imageHeight'] = self.height
         with open(self.label_path, 'w') as f:
